@@ -30,9 +30,8 @@
                         </div>
                     </div>
                 </form>
-                <div id="recent-searches">
-
-                </div>
+                <ul id="recent-searches" class="list-group">
+                </ul>
             </div>
             <div class="col-md-8" id="return">
             </div>
@@ -46,19 +45,26 @@
             var city = $("#city-input").val();
             var queryURL = "https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=da454049eb25737c3d38a1aabee0718c";
 
+            var lastSearch = $("<li>");
+            lastSearch.attr("class", "list-group-item");
+            lastSearch.text(city);
+            $("#recent-searches").prepend(lastSearch);
+
             $.ajax({
-                url:queryURL,
+                url: queryURL,
                 method: "GET"
-            }).then(function(response){
+            }).then(function (response) {
                 console.log(response);
                 var results = $("#return");
 
+                var callDate = new Date(response.dt * 1000).toLocaleDateString("en-US");
+
                 var cityTitle = $("<h4>");
-                cityTitle.text(city);
+                cityTitle.text(city + " (" + callDate + ")");
                 results.append(cityTitle);
 
-                var cityTemp = (((response.main.temp-273.15)*1.8)+32);
-                var cityTempRound = Math.round(cityTemp * 10) / 10; 
+                var cityTemp = (((response.main.temp - 273.15) * 1.8) + 32);
+                var cityTempRound = Math.round(cityTemp * 10) / 10;
                 var displayTemp = $("<div>");
                 displayTemp.text("Temperature: " + cityTempRound);
                 results.append(displayTemp);
@@ -67,8 +73,13 @@
                 var displayHumidity = $("<div>");
                 displayHumidity.text("Humidity: " + cityHumidity + "%");
                 results.append(displayHumidity);
-            });
 
+                var citySpeed = response.wind.speed;
+                var displaySpeed = $("<div>");
+                displaySpeed.text("Wind speed: " + citySpeed + " mph");
+                results.append(displaySpeed);
+            });
+            $("#city-input").val("");
         });
     </script>
 </body>
