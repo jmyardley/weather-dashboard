@@ -33,13 +33,17 @@
                 <ul id="recent-searches" class="list-group">
                 </ul>
             </div>
-            <div class="col-md-8" id="return">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12" id="return">
+                    </div>
+                </div>
 
 
+                <div class="row" id="cards">
+
+                </div>
             </div>
-        </div>
-        <div class="row" id="cards">
-
         </div>
     </div>
 
@@ -55,6 +59,9 @@
             lastSearch.attr("class", "list-group-item");
             lastSearch.text(city);
             $("#recent-searches").prepend(lastSearch);
+
+            results.html("");
+            $("#cards").html("");
 
             $.ajax({
                 url: queryURL,
@@ -91,9 +98,6 @@
                 url: queryURL2,
                 method: "GET"
             }).then(function (response) {
-                var cardsRow = $("<div>");
-                cardsRow.attr("class", "row");
-                results.append(cardsRow);
                 for (var i = 0; i < 5; i++) {
 
                     var date0 = response.list[i * 8].dt_txt.substring(0, 10);
@@ -109,7 +113,7 @@
                     dateDiv0.text(date0);
                     newCard.append(dateDiv0);
                     tempDiv0 = $("<div>");
-                    tempDiv0.text(temp0 + " degrees F" );
+                    tempDiv0.text(temp0 + " degrees F");
                     newCard.append(tempDiv0);
                     humDiv0 = $("<div>");
                     humDiv0.text(hum0 + "% humidity");
