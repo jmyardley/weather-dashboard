@@ -39,7 +39,9 @@
                     </div>
                 </div>
 
+                <div class="row" id="five-day">
 
+                </div>
                 <div class="row" id="cards">
 
                 </div>
@@ -75,6 +77,12 @@
                 cityTitle.text(city + " (" + callDate + ")");
                 results.append(cityTitle);
 
+                var cityIcon = $("<img>");
+                var iconCode = response.weather[0].icon;
+                var iconSrc = "https://openweathermap.org/img/w/" + iconCode + ".png";
+                cityIcon.attr("src", iconSrc);
+                results.append(cityIcon);
+
                 var cityTemp = (((response.main.temp - 273.15) * 1.8) + 32);
                 var cityTempRound = Math.round(cityTemp * 10) / 10;
                 var displayTemp = $("<div>");
@@ -98,24 +106,37 @@
                 url: queryURL2,
                 method: "GET"
             }).then(function (response) {
-                for (var i = 0; i < 5; i++) {
 
-                    var date0 = response.list[i * 8].dt_txt.substring(0, 10);
+
+                for (var i = 0; i < 5; i++) {
+                    var date0 = response.list[i * 8].dt_txt.substring(5, 10);
                     var temp0 = response.list[i * 8].main.temp;
+                    var tempFixed = (((temp0 - 273.15) * 1.8) + 32);
+                    var tempRound = Math.round(tempFixed * 10) / 10;
                     var hum0 = response.list[i * 8].main.humidity;
+                    var icon0 = response.list[i * 8].weather[0].icon;
+                    var iconSrc0 = "https://openweathermap.org/img/w/" + icon0 + ".png";
+
+
+                    
 
                     var newCard = $("<div>");
                     newCard.attr("class", "card text-white bg-primary mb-3 col-md-2");
                     newCard.attr("style", "margin: 10px");
+
+
                     $("#cards").append(newCard);
 
-                    dateDiv0 = $("<h5>");
+                    var dateDiv0 = $("<h6>");
                     dateDiv0.text(date0);
                     newCard.append(dateDiv0);
-                    tempDiv0 = $("<div>");
-                    tempDiv0.text(temp0 + " degrees F");
+                    var iconDiv0 = $("<img>");
+                    iconDiv0.attr("src", iconSrc0);
+                    newCard.append(iconDiv0);
+                    var tempDiv0 = $("<div>");
+                    tempDiv0.text(tempRound + " \u00B0 F");
                     newCard.append(tempDiv0);
-                    humDiv0 = $("<div>");
+                    var humDiv0 = $("<div>");
                     humDiv0.text(hum0 + "% humidity");
                     newCard.append(humDiv0);
 
